@@ -4,5 +4,12 @@
   "main": "index.js",
   "repository": "https://github.com/AboyL/node-blog.git",
   "author": "L <1053801783@qq.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www.js"
+  },
+  "devDependencies": {
+    "cross-env": "^6.0.3",
+    "nodemon": "^2.0.2"
+  }
 }
