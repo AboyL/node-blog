@@ -3,13 +3,37 @@ const url = require('url')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
 
-module.exports = (req, res) => {
+const getPostData = (req) => {
+  return new Promise((resolve) => {
+    if (req.method !== 'POST' || req.headers['content-type'] !== 'application/json') {
+      resolve({})
+      return
+    }
+    let postData = ''
+    req.on('data', chunk => {
+      postData += chunk
+    })
+    req.on('end', () => {
+      if (postData) {
+        resolve(JSON.parse(postData))
+      } else {
+        resolve({})
+      }
+    })
+  })
+}
+
+module.exports = async (req, res) => {
   // 设置头部信息
   res.setHeader('Content-type', 'application/json')
   const context = url.parse(req.url)
-  req.path = context.pathname
-  req.query= querystring.parse(context.query)
 
+  // 附加额外值
+  req.path = context.pathname
+  req.query = querystring.parse(context.query)
+  req.body = await getPostData(req)
+
+  // 处理返回值
   let result = {}
   result = handleBlogRouter(req, res)
   if (result) {
@@ -28,7 +52,7 @@ module.exports = (req, res) => {
 
   }
 
-  // 都没有匹配到 返回404
+  // 404 处理
   res.writeHead(404, {
     'Content-type': 'text/plain'
   })
