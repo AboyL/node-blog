@@ -35,7 +35,7 @@ module.exports = async (req, res) => {
 
   // 处理返回值
   let result = {}
-  result = handleBlogRouter(req, res)
+  result = await handleBlogRouter(req, res)
   if (result) {
     res.end(
       JSON.stringify(result)
@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
     return
   }
 
-  result = handleUserRouter(req, res)
+  result = await handleUserRouter(req, res)
   if (result) {
     res.end(
       JSON.stringify(result)
