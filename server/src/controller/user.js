@@ -6,12 +6,13 @@ const table_name = 'users'
  * @param {string} username 用户名
  * @param {string} password 密码
  */
-const checkLogin = async (username = '', password = '') => {
+const login = async (username = '', password = '') => {
   const sql = `select username,realname from ${table_name} where username='${username}' and password='${password}'`
   const result = await exec(sql)
   const info = result[0] || {}
   if (info.username) {
     return {
+      info,
       status: true
     }
   }
@@ -22,5 +23,5 @@ const checkLogin = async (username = '', password = '') => {
 }
 
 module.exports = {
-  checkLogin
+  login
 }

@@ -2,28 +2,22 @@ const querystring = require('querystring')
 const url = require('url')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
+const httpUtil = require('./src/utils/http-util')
 
-const getPostData = (req) => {
-  return new Promise((resolve) => {
-    if (req.method !== 'POST' || req.headers['content-type'] !== 'application/json') {
-      resolve({})
-      return
-    }
-    let postData = ''
-    req.on('data', chunk => {
-      postData += chunk
-    })
-    req.on('end', () => {
-      if (postData) {
-        resolve(JSON.parse(postData))
-      } else {
-        resolve({})
-      }
-    })
-  })
-}
+const { getPostData, parseCookie, SESSION_DATA, SESSION_NAME } = httpUtil
 
 module.exports = async (req, res) => {
+
+  // 设置cookie
+  const cookie = parseCookie(req.headers['cookie'] || "")
+  req.cookie = cookie
+  // 设置session
+  let session = SESSION_DATA[cookie[SESSION_NAME]]
+  if (session) {
+    // 表示有内容
+    req.session = session || {}
+  }
+
   // 设置头部信息
   res.setHeader('Content-type', 'application/json')
   const context = url.parse(req.url)
