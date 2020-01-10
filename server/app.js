@@ -3,8 +3,9 @@ const url = require('url')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
 const httpUtil = require('./src/utils/http-util')
+const { redisGet } = require('./src/db/redis')
 
-const { getPostData, parseCookie, SESSION_DATA, SESSION_NAME } = httpUtil
+const { getPostData, parseCookie, SESSION_NAME } = httpUtil
 
 module.exports = async (req, res) => {
 
@@ -12,7 +13,7 @@ module.exports = async (req, res) => {
   const cookie = parseCookie(req.headers['cookie'] || "")
   req.cookie = cookie
   // 设置session
-  let session = SESSION_DATA[cookie[SESSION_NAME]]
+  let session = await redisGet(cookie[SESSION_NAME])
   if (session) {
     // 表示有内容
     req.session = session || {}

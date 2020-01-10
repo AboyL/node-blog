@@ -1,4 +1,4 @@
-const { exec } = require('../db/index')
+const { exec } = require('../db/mysql')
 const { addNoMustWhere, addNoMustLikeWhere } = require('../db/utils')
 
 const table_name = 'blogs'

@@ -1,13 +1,11 @@
 const cookie = require('cookie')
+const { redisSet } = require('../db/redis')
 
-// session的存储对象
-const SESSION_DATA = {}
 
 // 跟seesion对应
 const SESSION_NAME = 'token'
 
 module.exports = {
-  SESSION_DATA,
   SESSION_NAME,
   parseCookie: (str = '') => cookie.parse(str),
   getCookie (key, value) {
@@ -19,7 +17,8 @@ module.exports = {
   },
   generateSeesionCookie (value) {
     const c = Date.now() + '_' + Math.random()
-    SESSION_DATA[c] = value
+    // 存储到redis之中
+    redisSet(c, value)
     return this.getCookie(SESSION_NAME, c)
   },
   getPostData (req) {
