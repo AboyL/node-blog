@@ -10,6 +10,8 @@ const handleUserRouter = async (req, res) => {
     const { username, password } = req.body
     const result = await login(username, password)
     if (result.status) {
+      const cookie = httpUtil.generateSeesionCookie(result.info)
+      res.setHeader('Set-Cookie', cookie)
       return new SuccessResModal({})
     }
     return new ErrorResModal('登录失败')

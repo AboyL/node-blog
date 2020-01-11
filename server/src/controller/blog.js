@@ -8,10 +8,16 @@ const table_name = 'blogs'
  * @param {string} author 作者
  * @param {string} keyword 关键字
  */
-const getBlogList = async (author = '', keyword = '') => {
+const getBlogList = async (author = '', keyword = '', { isAdmin, adminAuthor }) => {
   let sql = `select * from ${table_name} where 1=1 `
-  sql += addNoMustWhere('author', author)
   sql += addNoMustLikeWhere('title', keyword)
+  if (isAdmin) {
+    sql += addNoMustLikeWhere('author', adminAuthor)
+  } else {
+    sql += addNoMustWhere('author', author)
+
+  }
+
   sql += `order by createTime desc`
   const result = await exec(sql)
   return result
@@ -48,9 +54,9 @@ const createBlog = async (blogData = {}) => {
  */
 const updateBlog = async (id = '', blogData = {}) => {
   if (id) {
-    const { title, content } = blogData
+    const { title, content, author } = blogData
     const createTime = Date.now()
-    let sql = `update ${table_name} set title=${title},content=${content},createTime=${createTime} where id=${id}`
+    let sql = `update ${table_name} set title='${title}',content='${content}',createTime=${createTime} where id=${id} and author='${author}'`
     const result = await exec(sql)
     if (result.affectedRows > 0) {
       return {
@@ -72,7 +78,7 @@ const updateBlog = async (id = '', blogData = {}) => {
  * 删除博客
  * @param {string} id id
  */
-const deleteBlog = async (id,author) => {
+const deleteBlog = async (id, author) => {
   if (id) {
     let sql = `delete from ${table_name} where id=${id} and author='${author}'`
     const result = await exec(sql)
