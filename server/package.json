@@ -6,7 +6,7 @@
   "author": "L <1053801783@qq.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www.js"
+    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www.js & node ./src/utils/logs-schedule.js"
   },
   "devDependencies": {
     "cross-env": "^6.0.3",

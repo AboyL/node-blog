@@ -4,10 +4,14 @@ const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
 const httpUtil = require('./src/utils/http-util')
 const { redisGet } = require('./src/db/redis')
+const { access } = require('./src/utils/logs-util')
 
 const { getPostData, parseCookie, SESSION_NAME } = httpUtil
 
 module.exports = async (req, res) => {
+  // 日志处理
+  const logDate=new Date()
+  access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${logDate.getHours()}-${logDate.getMinutes()}-${logDate.getSeconds()}`)
 
   // 设置cookie
   const cookie = parseCookie(req.headers['cookie'] || "")
