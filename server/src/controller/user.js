@@ -1,4 +1,4 @@
-const { exec } = require('../db/mysql')
+const { exec,escape } = require('../db/mysql')
 const table_name = 'users'
 
 /**
@@ -7,7 +7,7 @@ const table_name = 'users'
  * @param {string} password 密码
  */
 const login = async (username = '', password = '') => {
-  const sql = `select username,realname from ${table_name} where username='${username}' and password='${password}'`
+  const sql = `select username,realname from ${table_name} where username=${escape(username)} and password=${escape(password)}`
   const result = await exec(sql)
   const info = result[0] || {}
   if (info.username) {

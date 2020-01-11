@@ -5,7 +5,7 @@ const { getBlogList, getBlogDetail, createBlog, updateBlog, deleteBlog } = requi
 const api_series = 'blog'
 // 统一的登录验证函数
 const loginCheck = (req) => {
-  if (!req.session) {
+  if (!req.session.username) {
     return new ErrorResModal('尚未登录')
   }
 }

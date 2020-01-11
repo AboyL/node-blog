@@ -18,10 +18,7 @@ module.exports = async (req, res) => {
   req.cookie = cookie
   // 设置session
   let session = await redisGet(cookie[SESSION_NAME])
-  if (session) {
-    // 表示有内容
-    req.session = session || {}
-  }
+  req.session = session || {}
 
   // 设置头部信息
   res.setHeader('Content-type', 'application/json')
