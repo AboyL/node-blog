@@ -1,5 +1,6 @@
-const { exec,escape } = require('../db/mysql')
-const { addNoMustWhere, addNoMustLikeWhere } = require('../db/utils')
+const { exec } = require('../db/mysql')
+const { addNoMustWhere, addNoMustLikeWhere,resolveParam } = require('../db/utils')
+
 
 const table_name = 'blogs'
 
@@ -27,7 +28,7 @@ const getBlogList = async (author = '', keyword = '', { isAdmin, adminAuthor }) 
  * @param {string} id id
  */
 const getBlogDetail = async (id) => {
-  let sql = `select * from ${table_name} where id=${escape(id)} `
+  let sql = `select * from ${table_name} where id=${resolveParam(id)} `
   const result = await exec(sql)
   return result
 }
@@ -40,7 +41,7 @@ const createBlog = async (blogData = {}) => {
   const { title, content, author } = blogData
   const createTime = Date.now()
   let sql = `insert into ${table_name}(title,author,content,createTime) 
-  values(${escape(title)},${escape(author)},${escape(content)},${escape(createTime)})`
+  values(${resolveParam(title)},${resolveParam(author)},${resolveParam(content)},${resolveParam(createTime)})`
   const result = await exec(sql)
   return {
     id: result.insertId
@@ -56,7 +57,7 @@ const updateBlog = async (id = '', blogData = {}) => {
   if (id) {
     const { title, content, author } = blogData
     const createTime = Date.now()
-    let sql = `update ${table_name} set title=${escape(title)},content=${escape(content)},createTime=${escape(createTime)} where id=${escape(id)} and author=${escape(author)}`
+    let sql = `update ${table_name} set title=${resolveParam(title)},content=${resolveParam(content)},createTime=${resolveParam(createTime)} where id=${resolveParam(id)} and author=${resolveParam(author)}`
     const result = await exec(sql)
     if (result.affectedRows > 0) {
       return {
@@ -80,7 +81,7 @@ const updateBlog = async (id = '', blogData = {}) => {
  */
 const deleteBlog = async (id, author) => {
   if (id) {
-    let sql = `delete from ${table_name} where id=${escape(id)} and author=${escape(author)}`
+    let sql = `delete from ${table_name} where id=${resolveParam(id)} and author=${resolveParam(author)}`
     const result = await exec(sql)
     if (result.affectedRows > 0) {
       return {

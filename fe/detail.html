@@ -81,7 +81,7 @@
             // 显示数据
             const data = res.data[0] || {}
             $title.text(data.title)
-            $content.text(data.content)
+            $content.html(data.content)
             $infoContainer.append($(`
                 <span>
                     <a href="/index.html?author=${data.author}">${data.author}</a>
