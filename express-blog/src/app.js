@@ -36,7 +36,7 @@ app.use(session({
 
 const logModel = process.env.NODE_ENV === 'dev' ? 'dev' : combined
 app.use(logger(logModel, {
-  stream: accessWriteStream
+  stream: logModel==='dev'?process.stdout:accessWriteStream
 }));
 
 app.use(express.json());
