@@ -34,7 +34,7 @@ app.use(session({
   store: sessionStore
 }))
 
-const logModel = process.env.NODE_ENV === 'dev' ? 'dev' : combined
+const logModel = process.env.NODE_ENV === 'dev' ? 'combined' : 'combined'
 app.use(logger(logModel, {
   stream: logModel==='dev'?process.stdout:accessWriteStream
 }));

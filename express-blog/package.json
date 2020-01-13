@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www.js & node ./src/utils/logs-schedule.js"
+    "dev": "cross-env NODE_ENV=dev nodemon ./bin/www.js & node ./src/utils/logs-schedule.js",
+    "prod": "cross-env NODE_ENV=prod nodemon ./bin/www.js & node ./src/utils/logs-schedule.js"
+
   },
   "dependencies": {
     "connect-redis": "^4.0.3",
